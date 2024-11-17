@@ -47,6 +47,24 @@ class Trie{
         return word;
 
     }
+    remove(word){
+        const removeHelper = (node, word, depth) => {
+            if(!node) return false;
+            if(depth === word.length){
+                if(node.isEndOfWord){
+                    node.isEndOfWord = false;
+                }
+                return Object.keys(node.children).length === 0;
+            }
+            const char = word[depth];
+            if(removeHelper(node.children[char], word , depth + 1)) {
+                delete node.children[char];
+                return Object.keys(node.children).length === 0 && !node.isEndOfWord;
+            }
+        return false;
+        }
+    removeHelper(this.root, word, 0);
+    }
 }
 const trie = new Trie;
 console.log(trie.insert("apple"));
@@ -90,10 +108,12 @@ function replaceWord(dictionaty,sentence){
     for(const root of dictionaty){
         trie.insert(root);
     }
-    return sentence.split(' ').map(word => trie.searchiRoot(word)).join(' ');
+    return sentence.split(' ').map(word => trie.searchRoot(word)).join(' ');
 
 }
 
 const dictionary = ["cat", "bat", "rat"];
 const sentence = "the cattle was rattled by the battery";
 console.log(replaceWord(dictionary, sentence));
+trie.remove("apple");
+console.log(trie.search("apple")); // false
