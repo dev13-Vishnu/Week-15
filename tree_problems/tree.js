@@ -38,6 +38,10 @@ class Tree{
             this.print(child, level+1);
         }
     }
+    search(value){
+        const node = this.find(this.root, value);
+        return node !== null;
+    }
 }
 
 const myTree  = new Tree("root");
@@ -46,6 +50,8 @@ myTree.insert("root","child2");
 myTree.insert("child1","child1.1");
 myTree.insert("child1", "child1.2");
 myTree.insert("child2","child2.1");
+console.log("search child1:",myTree.search("child1"));
+console.log("search child3:", myTree.search("child3"));
 console.log("tree structure");
 myTree.print();
 const node = myTree.find(myTree.root,"child1");
