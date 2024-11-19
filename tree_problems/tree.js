@@ -39,7 +39,7 @@ class Tree {
         const node = this.find(this.root, value);
         return node !== null;
     }
-    delete(value){
+    deleteWithChildren(value){
         if(this.root.value === value){
             console.log("cannot delete the root node.");
             return ;
@@ -50,6 +50,18 @@ class Tree {
             return;
         }
         parentNode.children = parentNode.children.filter(child => child.value !== value);
+    }
+    deleteWithoutRemovingChildren(value){
+        if(this.root.value === value){
+            console.log("cannot delete the root node.");
+            return ;
+        }
+        const parentNode = this.findParent(this.root, value)
+        if(!parentNode){
+            console.log(`parent Node with value '${value} not found.`);
+            return;
+        }
+        parentNode.children = parentNode.children.flatMap(child => child.value === value ? child.children : child);
     }
     findParent(node,value){
         if(!node) return null;
@@ -77,12 +89,16 @@ console.log("searched Item",myTree.search("child1"));
 console.log("searched Item",myTree.search("child3"));
 const node = myTree.find(myTree.root,"child1");
 console.log("found Node:", node ? node.value : "node.found");
-console.log("Deleting child");
-myTree.delete("child1");
+
+console.log("Deleting child1");
+myTree.deleteWithoutRemovingChildren("child1");
+myTree.print();
+console.log("Deleting child2");
+myTree.deleteWithChildren("child2");
 myTree.print();
 console.log("Deleting child3 (non - existent)");
-myTree.delete("child3");
+myTree.deleteWithChildren("child3");
 myTree.print();
 console.log("Trying to delete the root node");
-myTree.delete("root");
+myTree.deleteWithoutRemovingChildren("root");
 myTree.print();
